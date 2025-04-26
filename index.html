@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>قائمة لعبة</title>
+  <style>
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+      z-index: 2;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    .menu button {
+      background: none;
+      border: 2px solid #0ff;
+      padding: 15px 30px;
+      color: #0ff;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .menu button:hover {
+      background: #0ff;
+      color: #000;
+    }
+
+    .message {
+      margin-top: 50px;
+      font-size: 1.5em;
+      opacity: 0;
+      transition: opacity 1s;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .lights, .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .light {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #0ff;
+      border-radius: 50%;
+      animation: moveLight 5s infinite linear;
+      opacity: 0.7;
+    }
+
+    @keyframes moveLight {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(300px, 300px) scale(1.5);
+      }
+      100% {
+        transform: translate(0, 600px) scale(1);
+      }
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ff0;
+      border-radius: 50%;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ قائمة اللعبة ✨</h1>
+
+  <div class="menu">
+    <button onclick="startGame()">لعب</button>
+  </div>
+
+  <div class="message" id="message">
+    <p id="name"></p>
+    <p id="greeting"></p>
+  </div>
+
+  <div class="lights" id="lights"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    function startGame() {
+      const msg = document.getElementById('message');
+      const name = document.getElementById('name');
+      const greeting = document.getElementById('greeting');
+      const lights = document.getElementById('lights');
+      const confetti = document.getElementById('confetti');
+
+      name.textContent = 'MOHAMED ADLY';
+      greeting.textContent = 'كل سنة وانت طيب يا أخوياا';
+      msg.style.opacity = 1; // تظهر الرسالة وتظل موجودة
+
+      // <<<< حذفت الكود اللي كان بيخفي الرسالة >>>>
+
+      // زيادة عدد الأنوار إلى الضعف
+      for (let i = 0; i < 20; i++) {
+        const light = document.createElement('div');
+        light.classList.add('light');
+        light.style.top = Math.random() * 100 + '%';
+        light.style.left = Math.random() * 100 + '%';
+        light.style.animationDelay = Math.random() * 5 + 's';
+        lights.appendChild(light);
+      }
+
+      // نزول الزينة مع ارتداد
+      for (let i = 0; i < 50; i++) {
+        createConfetti();
+      }
+    }
+
+    function createConfetti() {
+      const confetti = document.getElementById('confetti');
+      const piece = document.createElement('div');
+      piece.classList.add('confetti-piece');
+      piece.style.left = Math.random() * window.innerWidth + 'px';
+      piece.style.top = '0px';
+      piece.style.backgroundColor = randomColor();
+      
+      confetti.appendChild(piece);
+
+      let x = Math.random() * window.innerWidth;
+      let y = 0;
+      let dx = (Math.random() - 0.5) * 4;
+      let dy = Math.random() * 2 + 2;
+
+      function move() {
+        x += dx;
+        y += dy;
+
+        if (x <= 0 || x >= window.innerWidth - 10) {
+          dx = -dx;
+        }
+        if (y >= window.innerHeight - 10) {
+          dy = -dy * 0.7;
+        }
+
+        piece.style.left = x + 'px';
+        piece.style.top = y + 'px';
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+
+      // حذف القطعة بعد 10 ثواني
+      setTimeout(() => {
+        piece.remove();
+      }, 10000);
+    }
+
+    function randomColor() {
+      const colors = ['#ff0', '#0f0', '#f0f', '#0ff', '#f00', '#00f'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+  </script>
+
+</body>
+</html>
+                                                                                                                                                
